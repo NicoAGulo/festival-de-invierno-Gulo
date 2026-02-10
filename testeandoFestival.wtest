@@ -1,0 +1,83 @@
+import festival.*
+
+describe "Festival" {
+
+//ARMAS
+const ningunArma = new Arma(puntos = 0)
+const hacha = new Arma(puntos = 30)
+const masa = new Arma (puntos =100)
+
+//VIKINGOS
+const hipo = new Vikingo(peso= 50, inteligencia= 30, velocidad= 60, barbarosidad=50, item= ningunArma)
+const astrid = new Vikingo(peso= 40, inteligencia= 40, velocidad= 70, barbarosidad=40, item= hacha)
+const patan = new Vikingo(peso= 55, inteligencia= 10, velocidad= 30, barbarosidad=65, item= masa)
+const patapez = new Patapez(peso=90, inteligencia=60, velocidad=5, barbarosidad=10, item= itemComestible)
+
+//POSTAS
+const postaDePesca = new Pesca()
+const postaDeCombate = new Combate()
+const postaDeCarrera = new Carrera(kilometrosDeCarrera= 10)
+
+
+  test "Se inscriben todos los vikingos al torneo" {
+
+    hipo.inscribirseATorneo(festival)
+    astrid.inscribirseATorneo(festival)
+    patan.inscribirseATorneo(festival)
+    patapez.inscribirseATorneo(festival)
+
+    assert.that(festival.competidores().contains(hipo))
+    assert.that(festival.competidores().contains(astrid))
+    assert.that(festival.competidores().contains(patan))
+    assert.that(festival.competidores().contains(patapez))
+  }
+
+  test "Comparacion de competidores en PESCA" {
+    hipo.inscribirseATorneo(festival)
+    astrid.inscribirseATorneo(festival)
+    patan.inscribirseATorneo(festival)
+    patapez.inscribirseATorneo(festival)
+
+    assert.that(postaDePesca.esMejorCompetidorQueOtro(hipo, astrid)) //Hipo le  gana a Astrid
+    assert.notThat(postaDePesca.esMejorCompetidorQueOtro(astrid, hipo)) //Astrid NO le gana a Hipo
+
+    assert.that(postaDePesca.esMejorCompetidorQueOtro(patan, hipo)) //Patan le  gana a Hipo
+    assert.notThat(postaDePesca.esMejorCompetidorQueOtro(hipo, patan)) //Hipo NO le gana a Patan
+
+    assert.that(postaDePesca.esMejorCompetidorQueOtro(astrid, patapez)) //Patan le  gana a Hipo
+    assert.notThat(postaDePesca.esMejorCompetidorQueOtro(patapez, astrid)) //Hipo NO le gana a Patan
+  }
+
+  test "Comparacion de competidores en COMBATE" {
+    hipo.inscribirseATorneo(festival)
+    astrid.inscribirseATorneo(festival)
+    patan.inscribirseATorneo(festival)
+    patapez.inscribirseATorneo(festival)
+
+    assert.that(postaDeCombate.esMejorCompetidorQueOtro(patan, patapez)) //patan le  gana a patapez
+    assert.notThat(postaDeCombate.esMejorCompetidorQueOtro(patapez, patan)) //patapez NO le gana a patan
+
+    assert.that(postaDeCombate.esMejorCompetidorQueOtro(astrid, hipo)) //astrid le  gana a hipo
+    assert.notThat(postaDeCombate.esMejorCompetidorQueOtro(hipo, astrid)) //hipo NO le gana a astrid
+
+    assert.that(postaDeCombate.esMejorCompetidorQueOtro(hipo, patapez)) //Patan le  gana a Hipo
+    assert.notThat(postaDeCombate.esMejorCompetidorQueOtro(patapez, hipo)) //Hipo NO le gana a Patan
+  }
+
+  test "Comparacion de competidores en CARRERA" {
+    hipo.inscribirseATorneo(festival)
+    astrid.inscribirseATorneo(festival)
+    patan.inscribirseATorneo(festival)
+    patapez.inscribirseATorneo(festival)
+
+    assert.that(postaDeCarrera.esMejorCompetidorQueOtro(astrid, hipo)) //astrid le  gana a hipo
+    assert.notThat(postaDeCarrera.esMejorCompetidorQueOtro(hipo, astrid)) //hipo NO le gana a astrid
+
+    assert.that(postaDeCarrera.esMejorCompetidorQueOtro(patan, patapez)) //patan le  gana a patapez
+    assert.notThat(postaDeCarrera.esMejorCompetidorQueOtro(patapez, patan)) //patapez NO le gana a patan
+
+    assert.that(postaDeCarrera.esMejorCompetidorQueOtro(hipo, patan)) //hipo le  gana a patan
+    assert.notThat(postaDeCarrera.esMejorCompetidorQueOtro(patan, hipo)) //patan NO le gana a hipo
+  }
+
+}

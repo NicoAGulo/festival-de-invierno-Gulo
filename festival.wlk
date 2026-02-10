@@ -1,8 +1,8 @@
 class Vikingo {
-  const peso
-  const inteligencia
-  const velocidad // km/h
-  const barbarosidad 
+  const property peso
+  const property inteligencia
+  const property velocidad // km/h
+  const property barbarosidad 
 
   const maximoHambre = 100
   const minimoHambre = 0
@@ -10,13 +10,13 @@ class Vikingo {
   var nivelHambre = 0 //0% = sin hambre, 100% hambre maxima
 
   
-  var property item = ningunArma
+  var property item
 
   method inscribirseATorneo(torneo){
-    torneo.agregarParticipante(self)
+    torneo.agregarCompetidor(self)
   }
 
-  method bonusPorItem(){
+  method bonusAdicional(){
     return item.puntos()
   }
 
@@ -34,14 +34,14 @@ class Vikingo {
 }
 
 object festival {
-  var competidores = #{}
+  var property competidores = #{}
   
-  method iniciarFestival(){
-    const postaDePesca = new Pesca()
-    const postaDeCombate = new Combate()
-    const postaDeCarrera = new Carrera(kilometrosDeCarrera= 10)
+  method iniciarTorneo(){
 
+  }
 
+  method agregarCompetidor(competidor){
+    competidores.add(competidor)
   }
 }
 
@@ -105,23 +105,19 @@ class Arma {
   const property puntos
 }
 
-const ningunArma = new Arma(puntos = 0)
-const hacha = new Arma(puntos = 30)
-const masa = new Arma (puntos =100)
-
 object itemComestible{
   const nutricion = 25
+
+  method puntos(){
+    return 0
+  }
 
   method comerItem(vikingo){
     vikingo.disminuirHambre(nutricion)
   }
 }
 
-//VIKINGOS
-
-const hipo = new Vikingo(peso= 50, inteligencia= 30, velocidad= 60, barbarosidad=50)
-const astrid = new Vikingo(peso= 40, inteligencia= 40, velocidad= 70, barbarosidad=40, item= hacha)
-const patan = new Vikingo(peso= 55, inteligencia= 10, velocidad= 30, barbarosidad=65, item= masa)
+//VIKINGO DISTINTO
 
 class Patapez inherits Vikingo{
   
