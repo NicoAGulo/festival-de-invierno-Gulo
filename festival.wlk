@@ -44,6 +44,10 @@ object festival {
   method iniciarFestival(){
     postas.forEach({posta => posta.iniciarPosta(competidores)})
   }
+
+  method agregarPosta(posta){
+    postas.add(posta)
+  }
 }
 
 //POSTAS
@@ -51,7 +55,7 @@ class Posta{
   method hambreGeneradaAlparticipar()
   method atributoParaCompetir(vikingo)
 
-  var participantes = []
+  var property participantes = []
 
   method puedeParticipar(alguien){
     return alguien.puedeSoportarHambre(self.hambreGeneradaAlparticipar())

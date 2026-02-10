@@ -16,8 +16,7 @@ const patapez = new Patapez(peso=90, inteligencia=60, velocidad=5, barbarosidad=
 //POSTAS
 const postaDePesca = new Pesca()
 const postaDeCombate = new Combate()
-const postaDeCarrera = new Carrera(kilometrosDeCarrera= 10)
-
+const postaDeCarrera = new Carrera(kilometrosDeCarrera=10)
 
   test "Se inscriben todos los vikingos al torneo" {
 
@@ -39,8 +38,8 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera= 10)
     assert.that(postaDePesca.esMejorCompetidorQueOtro(patan, hipo)) //Patan le  gana a Hipo
     assert.notThat(postaDePesca.esMejorCompetidorQueOtro(hipo, patan)) //Hipo NO le gana a Patan
 
-    assert.that(postaDePesca.esMejorCompetidorQueOtro(astrid, patapez)) //Patan le  gana a Hipo
-    assert.notThat(postaDePesca.esMejorCompetidorQueOtro(patapez, astrid)) //Hipo NO le gana a Patan
+    assert.that(postaDePesca.esMejorCompetidorQueOtro(astrid, patapez)) //Patan le  gana a Patapez
+    assert.notThat(postaDePesca.esMejorCompetidorQueOtro(patapez, astrid)) //Patapez NO le gana a Patan
   }
 
   test "Comparacion de competidores en COMBATE" {
@@ -66,8 +65,38 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera= 10)
     assert.notThat(postaDeCarrera.esMejorCompetidorQueOtro(patan, hipo)) //patan NO le gana a hipo
   }
 
-  test "" {
+  test "Se inicia el festival" {
+    hipo.inscribirseATorneo(festival)
+    astrid.inscribirseATorneo(festival)
+    patan.inscribirseATorneo(festival)
+    patapez.inscribirseATorneo(festival)
     
+    assert.that(festival.competidores().contains(hipo))
+    assert.that(festival.competidores().contains(astrid))
+    assert.that(festival.competidores().contains(patan))
+    assert.that(festival.competidores().contains(patapez))
+
+    festival.agregarPosta(postaDePesca)
+    festival.agregarPosta(postaDeCombate)
+    festival.agregarPosta(postaDeCarrera)
+    
+    festival.iniciarFestival()
+  }
+  test "Gana Patan en Pesca y Combate, Astrid en Carrera" {
+    hipo.inscribirseATorneo(festival)
+    astrid.inscribirseATorneo(festival)
+    patan.inscribirseATorneo(festival)
+    patapez.inscribirseATorneo(festival)
+
+    festival.agregarPosta(postaDePesca)
+    festival.agregarPosta(postaDeCombate)
+    festival.agregarPosta(postaDeCarrera)
+    
+    festival.iniciarFestival()
+
+    assert.that(postaDePesca.participantes().first() == patan)
+    assert.that(postaDeCombate.participantes().first() == patan)
+    assert.that(postaDeCarrera.participantes().first() == astrid)
   }
 
 
