@@ -35,13 +35,14 @@ class Vikingo {
 
 object festival {
   var property competidores = #{}
-  
-  method iniciarTorneo(){
-
-  }
+  const postas= #{}
 
   method agregarCompetidor(competidor){
     competidores.add(competidor)
+  }
+
+  method iniciarFestival(){
+    postas.forEach({posta => posta.iniciarPosta(competidores)})
   }
 }
 
@@ -50,7 +51,7 @@ class Posta{
   method hambreGeneradaAlparticipar()
   method atributoParaCompetir(vikingo)
 
-  const participantes = #{}
+  var participantes = []
 
   method puedeParticipar(alguien){
     return alguien.puedeSoportarHambre(self.hambreGeneradaAlparticipar())
@@ -64,6 +65,14 @@ class Posta{
 
   method esMejorCompetidorQueOtro(competidor, otro){
     return self.atributoParaCompetir(competidor) > self.atributoParaCompetir(otro) //A mayor nivel de atributo, mejor competidor.
+  }
+
+  method iniciarPosta(competidores){
+    participantes = competidores
+      .filter({c => self.puedeParticipar(c)})
+      .sortedBy({c1, c2 => self.esMejorCompetidorQueOtro(c1, c2)})
+
+    participantes.forEach({p => p.aumentarHambre(self.hambreGeneradaAlparticipar())})
   }
 }
 
@@ -129,3 +138,5 @@ class Patapez inherits Vikingo{
     return (nivelHambre + hambrePorAdicionar) < 50
   }
 }
+
+
