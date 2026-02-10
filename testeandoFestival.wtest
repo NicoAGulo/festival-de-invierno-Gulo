@@ -33,11 +33,6 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera= 10)
   }
 
   test "Comparacion de competidores en PESCA" {
-    hipo.inscribirseATorneo(festival)
-    astrid.inscribirseATorneo(festival)
-    patan.inscribirseATorneo(festival)
-    patapez.inscribirseATorneo(festival)
-
     assert.that(postaDePesca.esMejorCompetidorQueOtro(hipo, astrid)) //Hipo le  gana a Astrid
     assert.notThat(postaDePesca.esMejorCompetidorQueOtro(astrid, hipo)) //Astrid NO le gana a Hipo
 
@@ -49,11 +44,6 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera= 10)
   }
 
   test "Comparacion de competidores en COMBATE" {
-    hipo.inscribirseATorneo(festival)
-    astrid.inscribirseATorneo(festival)
-    patan.inscribirseATorneo(festival)
-    patapez.inscribirseATorneo(festival)
-
     assert.that(postaDeCombate.esMejorCompetidorQueOtro(patan, patapez)) //patan le  gana a patapez
     assert.notThat(postaDeCombate.esMejorCompetidorQueOtro(patapez, patan)) //patapez NO le gana a patan
 
@@ -65,10 +55,6 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera= 10)
   }
 
   test "Comparacion de competidores en CARRERA" {
-    hipo.inscribirseATorneo(festival)
-    astrid.inscribirseATorneo(festival)
-    patan.inscribirseATorneo(festival)
-    patapez.inscribirseATorneo(festival)
 
     assert.that(postaDeCarrera.esMejorCompetidorQueOtro(astrid, hipo)) //astrid le  gana a hipo
     assert.notThat(postaDeCarrera.esMejorCompetidorQueOtro(hipo, astrid)) //hipo NO le gana a astrid
@@ -79,5 +65,10 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera= 10)
     assert.that(postaDeCarrera.esMejorCompetidorQueOtro(hipo, patan)) //hipo le  gana a patan
     assert.notThat(postaDeCarrera.esMejorCompetidorQueOtro(patan, hipo)) //patan NO le gana a hipo
   }
+
+  test "" {
+    
+  }
+
 
 }
