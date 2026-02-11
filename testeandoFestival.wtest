@@ -116,5 +116,24 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera=10)
     assert.that(postaDeCarrera.participantes().last() == patapez)
   }
 
+  test "hipo solo gana en la primer posta porque tiene demasiada hambre para el resto y deja de participar. Gana Astrid la 2da y 3er posta." {
+    hipo.inscribirseATorneo(festival)
+    astrid.inscribirseATorneo(festival)
+    
+    hipo.aumentarHambre(90)
+    assert.that(postaDePesca.puedeParticipar(hipo))
 
+    festival.agregarPosta(postaDePesca)
+    festival.agregarPosta(postaDeCarrera)
+    festival.agregarPosta(postaDeCombate)
+
+    festival.iniciarFestival()
+
+    assert.that(postaDePesca.participantes().first() == hipo)
+    assert.that(postaDeCombate.participantes().first() == astrid)
+    assert.that(postaDeCarrera.participantes().first() == astrid)
+
+    assert.notThat(postaDeCombate.participantes().contains(hipo))
+    assert.notThat(postaDeCarrera.participantes().contains(hipo))
+  }
 }
