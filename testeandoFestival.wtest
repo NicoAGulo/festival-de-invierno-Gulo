@@ -99,5 +99,22 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera=10)
     assert.that(postaDeCarrera.participantes().first() == astrid)
   }
 
+  test "Queda ultimo patapez en todas las competiciones" {
+    hipo.inscribirseATorneo(festival)
+    astrid.inscribirseATorneo(festival)
+    patan.inscribirseATorneo(festival)
+    patapez.inscribirseATorneo(festival)
+
+    festival.agregarPosta(postaDePesca)
+    festival.agregarPosta(postaDeCombate)
+    festival.agregarPosta(postaDeCarrera)
+    
+    festival.iniciarFestival()
+
+    assert.that(postaDePesca.participantes().last() == patapez)
+    assert.that(postaDeCombate.participantes().last() == patapez)
+    assert.that(postaDeCarrera.participantes().last() == patapez)
+  }
+
 
 }
