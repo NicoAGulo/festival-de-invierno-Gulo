@@ -133,7 +133,20 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera=10)
     assert.that(postaDeCombate.participantes().first() == astrid)
     assert.that(postaDeCarrera.participantes().first() == astrid)
 
-    assert.notThat(postaDeCombate.participantes().contains(hipo))
-    assert.notThat(postaDeCarrera.participantes().contains(hipo))
+    assert.that(postaDePesca.participantes().contains(hipo)) //Solo participa en la de pesca y se le suma 5 de hambre
+    assert.notThat(postaDeCombate.participantes().contains(hipo)) // No participa
+    assert.notThat(postaDeCarrera.participantes().contains(hipo)) //N.P.
+
+
+    assert.that(postaDePesca.participantes().contains(astrid))    // +5
+    assert.that(postaDeCombate.participantes().contains(astrid))  // +10
+    assert.that(postaDeCarrera.participantes().contains(astrid))  // +10
+
+    assert.that(hipo.nivelHambre()==95)
+    assert.that(astrid.nivelHambre()==25)
   }
+
+  // test "patapez y su itemComestible (patapez vs patan)" {
+    
+  // }
 }

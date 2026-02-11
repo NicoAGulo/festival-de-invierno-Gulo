@@ -7,7 +7,7 @@ class Vikingo {
   const maximoHambre = 100
   const minimoHambre = 0
   
-  var nivelHambre = minimoHambre //0% = sin hambre, 100% hambre maxima
+  var property nivelHambre = minimoHambre //0% = sin hambre, 100% hambre maxima
 
   
   var property item
