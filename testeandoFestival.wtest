@@ -146,7 +146,25 @@ const postaDeCarrera = new Carrera(kilometrosDeCarrera=10)
     assert.that(astrid.nivelHambre()==25)
   }
 
-  // test "patapez y su itemComestible (patapez vs patan)" {
+  test "patapez y su itemComestible (patapez vs patan)" {
+
+    patapez.inscribirseATorneo(festival)
+    patan.inscribirseATorneo(festival)
     
-  // }
+    festival.agregarPosta(postaDePesca) 
+    festival.agregarPosta(postaDeCombate) 
+    festival.agregarPosta(postaDeCarrera) 
+
+    assert.that(patapez.nivelHambre()==0)
+
+    festival.iniciarFestival()
+
+    // patapez suma 5 de base multiplicado por 2 (+10) Pero consume su item que reduce su hambre en 10 (FINAL 0)
+    // patapez suma 10 de base multiplicado por 2 (+20) Pero consume su item que reduce su hambre en 10 (10 FINAL)
+    // patapez suma 10 (10 km son 10% mas de hambre) multiplicado por 2 (+10). Consume el item y resta 10 mas (10 FINAL)
+
+    assert.that(patapez.nivelHambre()==10)
+
+    
+  }
 }

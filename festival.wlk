@@ -31,6 +31,10 @@ class Vikingo {
   method puedeSoportarHambre(hambrePorAdicionar){
     return (nivelHambre + hambrePorAdicionar) < 100
   }
+
+  method afectarEnHambrePorPosta(cantidad){
+    self.aumentarHambre(cantidad)
+  }
 }
 
 object festival {
@@ -76,7 +80,7 @@ class Posta{
       .filter({c => self.puedeParticipar(c)})
       .sortedBy({c1, c2 => self.esMejorCompetidorQueOtro(c1, c2)})
 
-    participantes.forEach({p => p.aumentarHambre(self.hambreGeneradaAlparticipar())})
+    participantes.forEach({p => p.afectarEnHambre(self.hambreGeneradaAlparticipar())})
   }
 }
 
@@ -119,7 +123,7 @@ class Arma {
 }
 
 object itemComestible{
-  const nutricion = 25
+  const nutricion = 10
 
   method puntos(){
     return 0
@@ -140,6 +144,11 @@ class Patapez inherits Vikingo{
 
   override method puedeSoportarHambre(hambrePorAdicionar){
     return (nivelHambre + hambrePorAdicionar) < 50
+  }
+
+  override method afectarEnHambrePorPosta(cantidad){
+    super(cantidad)
+    item.comerItem(self)
   }
 }
 
