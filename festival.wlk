@@ -14,7 +14,7 @@ class Vikingo {
   var property item
   var montura = null
 
-  var property modoDeParticipacion = aPie
+  var property modoDeParticipacion = aPie //state
 
 
   method inscribirseATorneo(torneo){
@@ -112,6 +112,7 @@ object festival {
 class Posta{
   method hambreGeneradaAlparticipar()
   method atributoParaCompetir(vikingo)
+  method atributoDeDragon(dragon)
 
   var property participantes = []
 
@@ -129,16 +130,23 @@ class Posta{
     return self.atributoParaCompetir(competidor) > self.atributoParaCompetir(otro) //A mayor nivel de atributo, mejor competidor.
   }
 
-  method esMejorCompetidorSiVaAPie(competidor){
-    return self.atributoParaCompetir(competidor)
-  }
-
   method iniciarPosta(competidores){
     participantes = competidores
       .filter({c => self.puedeParticipar(c)})
       .sortedBy({c1, c2 => self.esMejorCompetidorQueOtro(c1, c2)})
 
     participantes.forEach({p => p.afectarPorPosta(self.hambreGeneradaAlparticipar())})
+  }
+
+  method mejorOpcionParaCompetirEnPosta(competidor){
+    festival.dragonesDisponibles()
+      .filter({dragon => competidor.puedeMontarDragon(dragon)})
+      .sortedBy({d1, d2 => self.esMejorDragonQueOtroParaPosta(d1, d2)})
+      .first()
+  }
+
+  method esMejorDragonQueOtroParaPosta(dragon, otroDragon){
+    return self.atributoDeDragon(dragon) > self.atributoDeDragon(otroDragon)
   }
 }
 
@@ -150,6 +158,10 @@ class Pesca inherits Posta{
   override method atributoParaCompetir(vikingo){
     return vikingo.aptitudParaPesca()
   }
+
+  override method atributoDeDragon(dragon){
+    return dragon.peso()
+  }
 }
 
 class Combate inherits Posta{
@@ -160,6 +172,11 @@ class Combate inherits Posta{
   override method atributoParaCompetir(vikingo){
     return vikingo.aptitudParaCombate()
   }
+
+  override method atributoDeDragon(dragon){
+    return dragon.daño()
+  }
+
 }
 
 class Carrera inherits Posta{
@@ -171,6 +188,10 @@ class Carrera inherits Posta{
 
   override method atributoParaCompetir(vikingo){
     return vikingo.aptitudParaCarrera()
+  }
+
+  override method atributoDeDragon(dragon){
+    return dragon.velocidadTotal()
   }
 }
 
@@ -213,7 +234,7 @@ class Patapez inherits Vikingo{
 
 //ESTADOS DE VIKINGO
 
-object aPie {
+object aPie { //cambiar nombre a normal?
   method cargaDePescados(vikingo, dragon){
     return vikingo.peso()/2 + vikingo.barbarosidad()*2
   }
@@ -227,7 +248,7 @@ object aPie {
   }
 }
 
-object aDragon {
+object aDragon { //Cambiar nombre a jinete?
   method cargaDePescados(vikingo, dragon){
     return (dragon.peso()*0.2 - vikingo.peso()).abs() //Evitando numeros negativos
   }
@@ -240,3 +261,6 @@ object aDragon {
     return dragon.velocidadTotal()-vikingo.peso()
   }
 }
+
+//punto 4: no debo utilizar el self.error() o debo hacerlo pero no donde haya un daño colateral(ej que sume puntos del dragon cuando no se pudo montar)?
+

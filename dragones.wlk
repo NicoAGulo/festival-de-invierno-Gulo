@@ -67,6 +67,10 @@ class Dragon {
 class FuriaNocturna inherits Dragon{
     const daño
 
+    override method velocidadTotal(){
+        return super()*3
+    }
+
     override method daño()= daño
 }
 
