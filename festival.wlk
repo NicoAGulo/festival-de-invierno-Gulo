@@ -47,8 +47,7 @@ class Vikingo {
   }
 
   method puedeMontarDragon(dragon){
-    return  not self.esJinete() && 
-            festival.esDragonDisponible(dragon) &&
+    return  festival.esDragonDisponible(dragon) &&
             dragon.esVikingoQueCumpleRequisitos(self)
   }
 
@@ -65,21 +64,21 @@ class Vikingo {
     modoDeParticipacion= aPie
   }
 
-  method esJinete(){
-    return montura != null
-  }
-
   method aptitudParaPesca(){
-    return modoDeParticipacion.cargaDePescados(self, montura)
-  }
+        return modoDeParticipacion.cargaDePescados(self, montura)
+    }
 
-  method aptitudParaCombate(){
-    return modoDeParticipacion.poderDeDaño(self, montura)
-  }
+    method aptitudParaCombate(){
+        return modoDeParticipacion.poderDeDaño(self, montura)
+    }
 
-  method aptitudParaCarrera(){
-    return modoDeParticipacion.velocidadMaxima(self, montura)
-  }
+    method aptitudParaCarrera(){
+        return modoDeParticipacion.velocidadMaxima(self, montura)
+    }
+
+    method esJinete(){
+      return modoDeParticipacion!=aPie
+    }
 }
 
 object festival {
