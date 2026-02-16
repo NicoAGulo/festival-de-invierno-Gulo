@@ -1,5 +1,6 @@
 import festival.*
 
+
 //DRAGONES
 /*
 
@@ -48,8 +49,8 @@ PUNTOS:
 */
 
 class Dragon {
-    const velocidadBase = 60
-    const peso
+    const property velocidadBase = 60
+    const property peso
 
     var property requisitos = #{requisitoDeCarga} //requisitos predeterminados. puede tener mas requisitos al instanciar otros dragones (RequisitoDeBarbarosidad o RequisitoDeItem)
 
@@ -90,7 +91,7 @@ class Gronckle inherits Dragon{
 
 object requisitoDeCarga{
     method esDragonConVikingoValido(dragon, vikingo){
-        return vikingo.peso()< dragon.peso()*0.2
+        return vikingo.peso() < (dragon.peso()*0.2)
     }
 }
 

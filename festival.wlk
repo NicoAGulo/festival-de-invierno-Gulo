@@ -1,5 +1,4 @@
-import dragones.*
-
+import Jinete.*
 class Vikingo {
   const property peso
   const property inteligencia
@@ -12,10 +11,6 @@ class Vikingo {
   var property nivelHambre = minimoHambre //0% = sin hambre, 100% hambre maxima
 
   var property item
-  var montura = null
-
-  var property modoDeParticipacion = aPie //state
-
 
   method inscribirseATorneo(torneo){
     torneo.agregarCompetidor(self)
@@ -30,7 +25,7 @@ class Vikingo {
   }
 
   method disminuirHambre(cantidad){
-    nivelHambre = (nivelHambre + cantidad).max(minimoHambre)
+    nivelHambre = (nivelHambre - cantidad).max(minimoHambre)
   }
 
   method puedeSoportarHambre(hambrePorAdicionar){
@@ -38,12 +33,7 @@ class Vikingo {
   }
 
   method afectarPorPosta(cantidad){
-    if (self.esJinete()){
-      self.aumentarHambre(5)
-      self.desmontarDragon(montura)
-    } else {
       self.aumentarHambre(cantidad)
-    }
   }
 
   method puedeMontarDragon(dragon){
@@ -51,40 +41,28 @@ class Vikingo {
             dragon.esVikingoQueCumpleRequisitos(self)
   }
 
-  method montarDragon(dragon){
-    if(self.puedeMontarDragon(dragon)){
-      montura=dragon
-      modoDeParticipacion=aDragon
-      festival.sacarDisponibilidadDeDragon(dragon)
-    }
-  }
-
-  method desmontarDragon(dragon){
-    montura=null
-    modoDeParticipacion= aPie
-  }
+  // method montarDragon(dragon){
+  //   if(self.puedeMontarDragon(dragon)){
+  //   }
+  // }
 
   method aptitudParaPesca(){
-        return modoDeParticipacion.cargaDePescados(self, montura)
-    }
+    return self.peso()/2 + self.barbarosidad()*2
+  }
 
-    method aptitudParaCombate(){
-        return modoDeParticipacion.poderDeDaño(self, montura)
-    }
-
-    method aptitudParaCarrera(){
-        return modoDeParticipacion.velocidadMaxima(self, montura)
-    }
-
-    method esJinete(){
-      return modoDeParticipacion!=aPie
-    }
+  method aptitudParaCombate(){
+    return self.barbarosidad() + self.bonusAdicional()
+  }
+  
+  method aptitudParaCarrera(){
+    return self.velocidad()
+  }
 }
 
 object festival {
   var property competidores = #{}
   var property dragonesDisponibles = #{}
-  const postas= #{}
+  const property postas= #{}
 
   method agregarCompetidor(competidor){
     competidores.add(competidor)
@@ -114,6 +92,7 @@ class Posta{
   method atributoDeDragon(dragon)
 
   var property participantes = []
+  var property jinetes = []
 
   method puedeParticipar(alguien){
     return alguien.puedeSoportarHambre(self.hambreGeneradaAlparticipar())
@@ -137,16 +116,49 @@ class Posta{
     participantes.forEach({p => p.afectarPorPosta(self.hambreGeneradaAlparticipar())})
   }
 
-  method mejorOpcionParaCompetirEnPosta(competidor){
-    festival.dragonesDisponibles()
-      .filter({dragon => competidor.puedeMontarDragon(dragon)})
-      .sortedBy({d1, d2 => self.esMejorDragonQueOtroParaPosta(d1, d2)})
-      .first()
+  method dragonesDisponiblesParaCompetidor(competidor){
+    return festival.dragonesDisponibles().filter({dragon => competidor.puedeMontarDragon(dragon)})
   }
 
-  method esMejorDragonQueOtroParaPosta(dragon, otroDragon){
-    return self.atributoDeDragon(dragon) > self.atributoDeDragon(otroDragon)
+  method posiblesFormasDeJinetear(competidor){
+    return self.dragonesDisponiblesParaCompetidor(competidor).map({d=> new Jinete(vikingo=competidor, dragon=d)})
   }
+
+  method mejorOpcionComoJinete(competidor){
+    return self.posiblesFormasDeJinetear(competidor).first()
+  }
+
+  method esMejorComoJineteQueSolo(jinete){
+    return self.esMejorCompetidorQueOtro(jinete, jinete.vikingo())
+  }
+
+  method versionMasCompetidora(competidor){
+    return if(self.esMejorComoJineteQueSolo(self.mejorOpcionComoJinete(competidor))){
+
+    }
+  }
+
+  method reemplazarParticipantesPorJinetes(){
+    participantes= participantes.map({p => })
+  }
+
+  method agregarParticipantesQuePuedenCompetir(){
+    participantes = festival.competidores().filter({c => self.puedeParticipar(c)})
+  }
+
+  method iniciarPostaConDragones(competidores){
+    participantes = competidores.filter({c => self.puedeParticipar(c)})
+    jinetes= participantes.filter({p => self.esMejorComoJineteQueSolo(p)})
+    participantes= participantes-jinetes
+
+
+
+      // .sortedBy({c1, c2 => self.esMejorCompetidorQueOtro(c1, c2)})
+    participantes.forEach({p => p.afectarPorPosta(self.hambreGeneradaAlparticipar())})
+  }
+
+
+
 }
 
 class Pesca inherits Posta{
@@ -154,8 +166,8 @@ class Pesca inherits Posta{
     return 5
   }
 
-  override method atributoParaCompetir(vikingo){
-    return vikingo.aptitudParaPesca()
+  override method atributoParaCompetir(participante){
+    return participante.aptitudParaPesca()
   }
 
   override method atributoDeDragon(dragon){
@@ -168,8 +180,8 @@ class Combate inherits Posta{
     return 10
   }
 
-  override method atributoParaCompetir(vikingo){
-    return vikingo.aptitudParaCombate()
+  override method atributoParaCompetir(participante){
+    return participante.aptitudParaCombate()
   }
 
   override method atributoDeDragon(dragon){
@@ -185,8 +197,8 @@ class Carrera inherits Posta{
     return kilometrosDeCarrera
   }
 
-  override method atributoParaCompetir(vikingo){
-    return vikingo.aptitudParaCarrera()
+  override method atributoParaCompetir(participante){
+    return participante.aptitudParaCarrera()
   }
 
   override method atributoDeDragon(dragon){
@@ -211,7 +223,11 @@ object itemComestible{
     vikingo.disminuirHambre(nutricion)
   }
 }
-object sistemaDeVuelo {}
+object sistemaDeVuelo {
+  method puntos(){
+    return 0
+  }
+}
 
 //VIKINGO DISTINTO
 
@@ -228,36 +244,6 @@ class Patapez inherits Vikingo{
   override method afectarPorPosta(cantidad){
     super(cantidad)
     item.comerItem(self)
-  }
-}
-
-//ESTADOS DE VIKINGO
-
-object aPie { //cambiar nombre a normal?
-  method cargaDePescados(vikingo, dragon){
-    return vikingo.peso()/2 + vikingo.barbarosidad()*2
-  }
-
-  method poderDeDaño(vikingo, dragon){
-    return vikingo.barbarosidad() + vikingo.bonusAdicional()
-  }
-  
-  method velocidadMaxima(vikingo, dragon){
-    return vikingo.velocidad()
-  }
-}
-
-object aDragon { //Cambiar nombre a jinete?
-  method cargaDePescados(vikingo, dragon){
-    return (dragon.peso()*0.2 - vikingo.peso()).abs() //Evitando numeros negativos
-  }
-  
-  method poderDeDaño(vikingo, dragon){
-    return vikingo.barbarosidad() + vikingo.bonusAdicional() + dragon.daño()
-  }
-
-  method velocidadMaxima(vikingo, dragon){
-    return dragon.velocidadTotal()-vikingo.peso()
   }
 }
 
